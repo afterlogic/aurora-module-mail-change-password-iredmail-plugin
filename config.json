@@ -1,0 +1,18 @@
+{
+	"Disabled": [
+		false,
+		"bool"
+	],
+	"SupportedServers": [
+		["*"],
+		"array"
+	],
+	"DbUser": [
+		"vmailadmin",
+		"string"
+	],
+	"DbPass": [
+		"",
+		"string"
+	]
+}
