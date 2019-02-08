@@ -18,17 +18,13 @@ namespace Aurora\Modules\MailChangePasswordIredmailPlugin;
  */
 class Module extends \Aurora\System\Module\AbstractModule
 {
-	/**
-	 * @param CApiPluginManager $oPluginManager
-	 */
-	
+	protected $oMailModule;
+
 	public function init() 
 	{
-		$this->oMailModule = \Aurora\System\Api::GetModule('Mail');
-	
 		$this->subscribeEvent('Mail::ChangePassword::before', array($this, 'onBeforeChangePassword'));
 	}
-	
+
 	/**
 	 * 
 	 * @param array $aArguments
@@ -38,9 +34,9 @@ class Module extends \Aurora\System\Module\AbstractModule
 	{
 		$mResult = true;
 		
-		$oAccount = $this->oMailModule->GetAccount($aArguments['AccountId']);
+		$oAccount = $this->getMailModule()->GetAccount($aArguments['AccountId']);
 
-		if ($oAccount && $this->checkCanChangePassword($oAccount))
+		if ($oAccount && $this->checkCanChangePassword($oAccount) && $oAccount->getPassword() === $aArguments['CurrentPassword'])
 		{
 			$mResult = $this->сhangePassword($oAccount, $aArguments['NewPassword']);
 		}
@@ -56,7 +52,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 		
 		if (!$bFound)
 		{
-			$oServer = $this->oMailModule->GetServer($oAccount->ServerId);
+			$oServer = $this->getMailModule()->GetServer($oAccount->ServerId);
 			if ($oServer && in_array($oServer->Name, $this->getConfig('SupportedServers')))
 			{
 				$bFound = true;
@@ -87,17 +83,18 @@ class Module extends \Aurora\System\Module\AbstractModule
 				}
 				mysqli_close($mysqlcon);
 			}else{
-				throw new \Aurora\System\Exceptions\ApiException(\Aurora\System\Exceptions\Errs::UserManager_AccountNewPasswordUpdateError);			}
+				throw new \Aurora\System\Exceptions\ApiException(\Aurora\System\Exceptions\Errs::UserManager_AccountNewPasswordUpdateError);
+			}
 	    }
 	    return $bResult;
 	}
-	
+
 	public function GetSettings()
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
-		
+
 		$sSupportedServers = implode("\n", $this->getConfig('SupportedServers', array()));
-		
+
 		$aAppData = array(
 			'SupportedServers' => $sSupportedServers,
 			'DbUser' => $this->getConfig('DbUser', ''),
@@ -110,13 +107,23 @@ class Module extends \Aurora\System\Module\AbstractModule
 	public function UpdateSettings($SupportedServers, $DbUser, $DbPass)
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::TenantAdmin);
-		
+
 		$aSupportedServers = preg_split('/\r\n|[\r\n]/', $SupportedServers);
-		
+
 		$this->setConfig('SupportedServers', $aSupportedServers);
 		$this->setConfig('DbUser', $DbUser);
 		$this->setConfig('DbPass', $DbPass);
 		$this->saveModuleConfig();
 		return true;
+	}
+
+	protected function getMailModule()
+	{
+		if (!$this->oMailModule)
+		{
+			$this->oMailModule = \Aurora\System\Api::GetModule('Mail');
+		}
+
+		return $this->oMailModule;
 	}
 }
