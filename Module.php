@@ -68,7 +68,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 	protected function сhangePassword($oAccount, $sPassword)
 	{
 	    $bResult = false;
-	    if (0 < strlen($oAccount->IncomingPassword) && $oAccount->IncomingPassword !== $sPassword )
+	    if (0 < strlen($oAccount->getPassword()) && $oAccount->getPassword() !== $sPassword )
 	    {
 			$iredmail_dbuser = $this->getConfig('DbUser','');
 			$iredmail_dbpass = $this->getConfig('DbPass','');
