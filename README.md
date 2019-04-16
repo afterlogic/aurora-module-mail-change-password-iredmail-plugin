@@ -9,4 +9,4 @@ In `data/settings/modules/MailChangePasswordIredmailPlugin.config.json` file, yo
 In the same file, you need to provide MySQL credentials used by iRedMail to access the database - this may be either **root** account, or **vmailadmin** user created by iRedMail when setting up the product.
 
 # License
-This module is licensed under AGPLv3 license if free version of the product is used or AfterLogic Software License if commercial version of the product was purchased.
+This module is licensed under AGPLv3 license if free version of the product is used or Afterlogic Software License if commercial version of the product was purchased.
