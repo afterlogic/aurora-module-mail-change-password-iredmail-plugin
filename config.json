@@ -1,18 +1,36 @@
 {
-	"Disabled": [
-		false,
-		"bool"
-	],
-	"SupportedServers": [
-		["*"],
-		"array"
-	],
-	"DbUser": [
-		"vmailadmin",
-		"string"
-	],
-	"DbPass": [
-		"",
-		"string"
-	]
+  "Disabled": [
+    false,
+    "bool"
+  ],
+  "Disabled_Description": [
+    "",
+    "string"
+  ],
+  "SupportedServers": [
+    [
+      "*"
+    ],
+    "array"
+  ],
+  "SupportedServers_Description": [
+    "",
+    "string"
+  ],
+  "DbUser": [
+    "vmailadmin",
+    "string"
+  ],
+  "DbUser_Description": [
+    "",
+    "string"
+  ],
+  "DbPass": [
+    "",
+    "string"
+  ],
+  "DbPass_Description": [
+    "",
+    "string"
+  ]
 }
