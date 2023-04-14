@@ -25,6 +25,15 @@ class Module extends \Aurora\System\Module\AbstractModule
     }
 
     /**
+     *
+     * @return Module
+     */
+    public static function Decorator()
+    {
+        return parent::Decorator();
+    }
+
+    /**
      * Adds to account response array information about if allowed to change the password for this account.
      * @param array $aArguments
      * @param mixed $mResult
