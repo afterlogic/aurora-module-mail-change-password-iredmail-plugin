@@ -66,7 +66,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 
     /**
      * Checks if allowed to change password for account.
-     * @param \Aurora\Modules\Mail\Classes\Account $oAccount
+     * @param \Aurora\Modules\Mail\Models\MailAccount $oAccount
      * @return bool
      */
     protected function checkCanChangePassword($oAccount)
@@ -86,7 +86,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 
     /**
      * Tries to change password for account.
-     * @param \Aurora\Modules\Mail\Classes\Account $oAccount
+     * @param \Aurora\Modules\Mail\Models\MailAccount $oAccount
      * @param string $sPassword
      * @return boolean
      * @throws \Aurora\System\Exceptions\ApiException
@@ -99,7 +99,7 @@ class Module extends \Aurora\System\Module\AbstractModule
             $iredmail_dbpass = $this->getConfig('DbPass', '');
 
             $mysqlcon = @mysqli_connect('localhost', $iredmail_dbuser, $iredmail_dbpass, 'vmail');
-            if (isset($mysqlcon) && $mysqlcon) {
+            if ($mysqlcon) {
                 $sRandomSalt = substr(md5(rand()), 0, 15);
                 $sPasshash = "{SSHA512}".base64_encode(hash('sha512', $sPassword.$sRandomSalt, true).$sRandomSalt);
                 $sql = "UPDATE mailbox SET password='" . $sPasshash . "' WHERE username='" . $oAccount->IncomingLogin . "'";
