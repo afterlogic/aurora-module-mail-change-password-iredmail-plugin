@@ -34,6 +34,15 @@ class Module extends \Aurora\System\Module\AbstractModule
     }
 
     /**
+     *
+     * @return Settings
+     */
+    protected function GetModuleSettings()
+    {
+        return $this->oModuleSettings;
+    }
+
+    /**
      * Adds to account response array information about if allowed to change the password for this account.
      * @param array $aArguments
      * @param mixed $mResult
