@@ -14,6 +14,8 @@ namespace Aurora\Modules\MailChangePasswordIredmailPlugin;
  * @license https://afterlogic.com/products/common-licensing Afterlogic Software License
  * @copyright Copyright (c) 2023, Afterlogic Corp.
  *
+ * @property Settings $oModuleSettings
+ *
  * @package Modules
  */
 class Module extends \Aurora\System\Module\AbstractModule
@@ -89,12 +91,12 @@ class Module extends \Aurora\System\Module\AbstractModule
      */
     protected function checkCanChangePassword($oAccount)
     {
-        $bFound = in_array('*', $this->getConfig('SupportedServers', array()));
+        $bFound = in_array('*', $this->oModuleSettings->SupportedServers);
 
         if (!$bFound) {
             $oServer = $oAccount->getServer();
 
-            if ($oServer && in_array($oServer->IncomingServer, $this->getConfig('SupportedServers'))) {
+            if ($oServer && in_array($oServer->IncomingServer, $this->oModuleSettings->SupportedServers)) {
                 $bFound = true;
             }
         }
@@ -113,8 +115,8 @@ class Module extends \Aurora\System\Module\AbstractModule
     {
         $bResult = false;
         if (0 < strlen($oAccount->getPassword()) && $oAccount->getPassword() !== $sPassword) {
-            $iredmail_dbuser = $this->getConfig('DbUser', '');
-            $iredmail_dbpass = $this->getConfig('DbPass', '');
+            $iredmail_dbuser = $this->oModuleSettings->DbUser;
+            $iredmail_dbpass = $this->oModuleSettings->DbPass;
 
             $mysqlcon = @mysqli_connect('localhost', $iredmail_dbuser, $iredmail_dbpass, 'vmail');
             if ($mysqlcon) {
@@ -141,12 +143,12 @@ class Module extends \Aurora\System\Module\AbstractModule
     {
         \Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::SuperAdmin);
 
-        $sSupportedServers = implode("\n", $this->getConfig('SupportedServers', array()));
+        $sSupportedServers = implode("\n", $this->oModuleSettings->SupportedServers);
 
         $aAppData = array(
             'SupportedServers' => $sSupportedServers,
-            'DbUser' => $this->getConfig('DbUser', ''),
-            'HasDbPass' => $this->getConfig('DbPass', '') !== '',
+            'DbUser' => $this->oModuleSettings->DbUser,
+            'HasDbPass' => $this->oModuleSettings->DbPass !== '',
         );
 
         return $aAppData;
