@@ -129,7 +129,7 @@ class Module extends \Aurora\System\Module\AbstractModule
                 $this->saveModuleConfig();
             } else {
                 $iredmail_dbpass = \Aurora\System\Utils::DecryptValue($iredmail_dbpass);
-            }            
+            }
 
             $mysqlcon = @mysqli_connect('localhost', $iredmail_dbuser, $iredmail_dbpass, 'vmail');
             if ($mysqlcon) {
