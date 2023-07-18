@@ -124,6 +124,13 @@ class Module extends \Aurora\System\Module\AbstractModule
             $iredmail_dbuser = $this->oModuleSettings->DbUser;
             $iredmail_dbpass = $this->oModuleSettings->DbPass;
 
+            if ($iredmail_dbpass && !\Aurora\System\Utils::IsEncryptedValue($iredmail_dbpass)) {
+                $this->setConfig('DbPass', \Aurora\System\Utils::EncryptValue($iredmail_dbpass));
+                $this->saveModuleConfig();
+            } else {
+                $iredmail_dbpass = \Aurora\System\Utils::DecryptValue($iredmail_dbpass);
+            }            
+
             $mysqlcon = @mysqli_connect('localhost', $iredmail_dbuser, $iredmail_dbpass, 'vmail');
             if ($mysqlcon) {
                 $sRandomSalt = substr(md5(rand()), 0, 15);
@@ -175,7 +182,7 @@ class Module extends \Aurora\System\Module\AbstractModule
 
         $this->setConfig('SupportedServers', $aSupportedServers);
         $this->setConfig('DbUser', $DbUser);
-        $this->setConfig('DbPass', $DbPass);
+        $this->setConfig('DbPass', \Aurora\System\Utils::EncryptValue($DbPass));
         $this->saveModuleConfig();
         return true;
     }
