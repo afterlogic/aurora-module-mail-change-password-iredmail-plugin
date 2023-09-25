@@ -134,7 +134,7 @@ class Module extends \Aurora\System\Module\AbstractModule
             $mysqlcon = @mysqli_connect('localhost', $iredmail_dbuser, $iredmail_dbpass, 'vmail');
             if ($mysqlcon) {
                 $sRandomSalt = substr(md5(rand()), 0, 15);
-                $sPasshash = "{SSHA512}".base64_encode(hash('sha512', $sPassword.$sRandomSalt, true).$sRandomSalt);
+                $sPasshash = "{SSHA512}" . base64_encode(hash('sha512', $sPassword . $sRandomSalt, true) . $sRandomSalt);
                 $sql = "UPDATE mailbox SET password='" . $sPasshash . "' WHERE username='" . $oAccount->IncomingLogin . "'";
                 $bResult = mysqli_query($mysqlcon, $sql);
                 if (!$bResult) {
